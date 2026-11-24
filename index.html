@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NINE's iPhone</title>
+<style>
+:root{
+  --bg:#0A0A0B; --panel:#141416; --panel2:#1C1C1E; --line:#2A2A2E;
+  --text:#F2F2F4; --muted:#8E8E93; --red:#D32F2F; --red2:#FF4D4D;
+  --pink:#FF8FAB; --kakao:#FEE500; --green:#30D158;
+  --sb:50px; --hb:44px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#050505;color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  -webkit-font-smoothing:antialiased;overflow:hidden}
+button,input{font:inherit;color:inherit;background:none;border:0;outline:none}
+button,[data-open],[data-action],[data-chat],[data-wa],[data-call],[data-photo],[data-note],[data-search],[data-kfriend],[data-tab],[data-toast],[data-toggle]{
+  cursor:pointer;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+.tap{min-height:44px;min-width:44px;transition:transform .12s ease,background-color .15s ease,opacity .15s}
+.tap:active{transform:scale(.95);opacity:.85}
+
+/* ---------- 스테이지 / 기기 ---------- */
+.stage{height:100%;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 30% 20%,#1a0c0e 0%,#050505 60%)}
+.phone{position:relative;width:390px;height:min(844px,calc(100vh - 32px));
+  border-radius:52px;border:11px solid #1b1b1d;box-shadow:0 0 0 2px #333,0 30px 80px rgba(0,0,0,.7);
+  overflow:hidden;background:var(--bg)}
+@media (max-width:520px){
+  .stage{align-items:stretch}
+  .phone{width:100vw;height:100vh;height:100dvh;border:0;border-radius:0;box-shadow:none}
+}
+
+/* 장식 레이어 - 터치 차단 */
+.statusbar,.island,.wall,.lock-wall,.toast,.hb-line,.deco{pointer-events:none}
+.statusbar{position:absolute;top:0;left:0;right:0;height:var(--sb);z-index:50;
+  display:flex;align-items:center;justify-content:space-between;padding:6px 26px 0 30px;
+  font-size:15px;font-weight:600}
+.island{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:118px;height:34px;
+  background:#000;border-radius:20px;z-index:51}
+.sb-right{display:flex;align-items:center;gap:6px;font-size:12px}
+.sig{display:flex;align-items:flex-end;gap:2px;height:12px}
+.sig i{display:block;width:3px;background:var(--text);border-radius:1px}
+.sig i:nth-child(1){height:4px}.sig i:nth-child(2){height:6px}.sig i:nth-child(3){height:9px}.sig i:nth-child(4){height:12px}
+.bat{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:600}
+.bat-box{width:25px;height:12px;border:1.5px solid rgba(255,255,255,.55);border-radius:4px;padding:1.5px;position:relative}
+.bat-box::after{content:"";position:absolute;right:-4px;top:3px;width:2px;height:4px;background:rgba(255,255,255,.55);border-radius:0 1px 1px 0}
+.bat-fill{height:100%;width:82%;background:var(--text);border-radius:1.5px}
+.moon{color:#A78BFA;font-size:12px}
+
+/* ---------- 화면 ---------- */
+.screens{position:absolute;inset:0}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);
+  padding-top:var(--sb);padding-bottom:var(--hb);
+  visibility:hidden;opacity:0;pointer-events:none;transform:translateX(26px);z-index:1;
+  transition:opacity .24s ease,transform .24s ease,visibility 0s linear .24s}
+.screen.active{visibility:visible;opacity:1;pointer-events:auto;transform:none;z-index:5;
+  transition:opacity .24s ease,transform .24s ease,visibility 0s}
+.screen.under{visibility:visible;opacity:1;pointer-events:none;transform:none;z-index:4;
+  filter:blur(8px) brightness(.55);transition:filter .24s ease,visibility 0s}
+#s-home,#s-lock{transform:scale(1.04)}
+#s-home.active,#s-lock.active,#s-home.under{transform:none}
+.body{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.body::-webkit-scrollbar{display:none}
+
+/* 공통 앱바 */
+.appbar{display:flex;align-items:center;gap:4px;padding:4px 8px 6px;min-height:52px;flex-shrink:0;
+  border-bottom:1px solid var(--line);background:rgba(10,10,11,.92)}
+.appbar h1{flex:1;font-size:17px;font-weight:700;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appbar .back{display:flex;align-items:center;justify-content:center;gap:2px;color:var(--red2);font-size:16px;padding:0 6px;border-radius:10px}
+.appbar .back b{font-size:26px;font-weight:400;line-height:1;margin-top:-3px}
+.appbar .sp{min-width:44px}
+.bigtitle{font-size:30px;font-weight:800;padding:14px 18px 6px;letter-spacing:-.5px}
+.section-t{font-size:13px;color:var(--muted);padding:16px 20px 8px;text-transform:uppercase;letter-spacing:.04em}
+.card{background:var(--panel2);border-radius:16px;margin:0 14px 12px;overflow:hidden}
+.row{display:flex;align-items:center;gap:12px;padding:10px 16px;min-height:56px;width:100%;text-align:left;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row:active{background:#26262a}
+.row .main{flex:1;min-width:0}
+.row .t{font-size:16px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .s{font-size:13px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .r{font-size:13px;color:var(--muted);text-align:right;flex-shrink:0}
+.chev{color:#555;font-size:18px;flex-shrink:0}
+.av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex-shrink:0;background:#2c2c30}
+.av.rabbit{background:linear-gradient(135deg,#ffd1dc,#ff8fab);font-size:22px}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:3px 8px;border-radius:20px;background:#2a2a2e;color:#ccc}
+.pill.red{background:rgba(211,47,47,.18);color:#ff7070}
+.pill.pink{background:rgba(255,143,171,.16);color:var(--pink)}
+.note-box{margin:0 14px 12px;padding:14px 16px;border-radius:14px;background:#17171a;border:1px solid var(--line);font-size:14px;line-height:1.6;color:#d9d9de}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 18px;border-radius:14px;background:var(--panel2);font-weight:600;font-size:15px}
+.btn.red{background:var(--red);color:#fff}
+.btnrow{display:flex;gap:10px;padding:6px 14px 14px}
+.btnrow .btn{flex:1}
+
+/* 탭 */
+.seg{display:flex;gap:6px;margin:8px 14px 12px;background:#1a1a1d;border-radius:12px;padding:4px}
+.seg button{flex:1;min-height:40px;border-radius:9px;font-size:14px;color:var(--muted);font-weight:600}
+.seg button.on{background:#2e2e33;color:var(--text)}
+.pane{display:none}.pane.on{display:block}
+
+/* ---------- 잠금화면 ---------- */
+#s-lock{background:#120a14;align-items:center}
+.lock-wall{position:absolute;inset:0;overflow:hidden;
+  background:linear-gradient(180deg,#1b1535 0%,#5b2a5e 30%,#c2456b 52%,#ff9a5a 68%,#ffd59a 76%,#2b4a6b 77%,#16283d 100%)}
+.lock-wall .sun{position:absolute;left:50%;top:62%;width:120px;height:120px;margin-left:-60px;border-radius:50%;
+  background:radial-gradient(circle,#fff3c4 0%,#ffc37a 55%,rgba(255,160,90,0) 72%)}
+.lock-wall .sea{position:absolute;left:0;right:0;top:77%;bottom:0;
+  background:repeating-linear-gradient(180deg,rgba(255,200,140,.18) 0 2px,transparent 2px 11px)}
+.lock-wall .duo{position:absolute;left:50%;bottom:17%;transform:translateX(-50%);font-size:64px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.5))}
+.lock-wall .cap{position:absolute;left:0;right:0;bottom:11%;text-align:center;font-size:12px;color:rgba(255,255,255,.75)}
+.lock-top{position:relative;text-align:center;margin-top:18px;text-shadow:0 2px 12px rgba(0,0,0,.35)}
+.lock-top .lk{font-size:16px;opacity:.9}
+.lock-date{font-size:18px;font-weight:600;margin-top:4px}
+.lock-time{font-size:clamp(64px,22vw,88px);font-weight:700;letter-spacing:-2px;line-height:1.05}
+.lock-focus{position:relative;margin-top:10px;font-size:13px;padding:7px 14px;border-radius:20px;background:rgba(0,0,0,.35);backdrop-filter:blur(10px)}
+.lock-hint{position:absolute;bottom:58px;left:0;right:0;text-align:center;font-size:13px;color:rgba(255,255,255,.8);animation:hint 2s ease-in-out infinite;pointer-events:none}
+@keyframes hint{0%,100%{transform:translateY(0);opacity:.6}50%{transform:translateY(-6px);opacity:1}}
+
+/* ---------- 홈 ---------- */
+#s-home{background:#0a0a0b}
+.wall{position:absolute;inset:0;z-index:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(211,47,47,.22),transparent 55%),
+  repeating-linear-gradient(45deg,#0d0d0f 0 6px,#111114 6px 12px)}
+.home-body{position:relative;z-index:1;padding:10px 18px 10px}
+.widget{background:rgba(28,28,30,.78);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.06);border-radius:22px;padding:14px 14px 12px;margin-bottom:18px;width:100%;text-align:left;display:block}
+.widget .wt{font-size:12px;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between}
+.wx-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.wx-c{background:rgba(255,255,255,.04);border-radius:14px;padding:10px 8px}
+.wx-c .city{font-size:12px;color:#c8c8cc}
+.wx-c .tm{font-size:22px;font-weight:700;margin:3px 0 2px;font-variant-numeric:tabular-nums}
+.wx-c .ko{font-size:11px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px 6px;margin-bottom:16px}
+.app{display:flex;flex-direction:column;align-items:center;gap:6px;min-height:80px;padding:2px 0;position:relative}
+.app .ic{width:clamp(52px,15vw,60px);height:clamp(52px,15vw,60px);border-radius:15px;display:flex;align-items:center;justify-content:center;
+  font-size:clamp(24px,7vw,28px);box-shadow:0 4px 12px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.12);pointer-events:none;position:relative}
+.app .lbl{font-size:11px;color:#e8e8ea;max-width:74px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
+.app:active .ic{transform:scale(.9);filter:brightness(.8)}
+.app .ic{transition:transform .12s,filter .12s}
+.badge{position:absolute;top:-6px;right:-8px;min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:#FF3B30;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.vip-row{display:flex;justify-content:center;margin:2px 0 18px}
+.vip-row .app .ic{width:68px;height:68px;border-radius:18px;box-shadow:0 0 0 2px rgba(255,143,171,.6),0 0 22px rgba(255,143,171,.35)}
+.crown{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:800;color:var(--pink);letter-spacing:.1em;pointer-events:none}
+.dock{position:relative;z-index:1;margin:0 12px 6px;padding:12px 10px;border-radius:30px;background:rgba(40,40,44,.55);backdrop-filter:blur(20px);
+  display:grid;grid-template-columns:repeat(4,1fr);gap:6px;flex-shrink:0}
+.dock .app{min-height:64px}.dock .lbl{display:none}
+.folder-ic{background:rgba(70,70,76,.55)!important;display:grid!important;grid-template-columns:1fr 1fr;gap:3px;padding:8px;font-size:12px!important}
+.folder-ic span{border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px}
+
+/* 아이콘 색 */
+.i-phone{background:linear-gradient(#5ef07a,#24b33d)}
+.i-safari{background:linear-gradient(#fff,#d9e6f5)}
+.i-cam{background:linear-gradient(#5b5b60,#2a2a2d)}
+.i-kakao{background:var(--kakao)}
+.i-papago{background:linear-gradient(135deg,#2be08a,#12a86a)}
+.i-photos{background:linear-gradient(#fff,#eee)}
+.i-notes{background:linear-gradient(#fff 0 26%,#fff6c9 26%)}
+.i-clock{background:#111;border:1px solid #333}
+.i-set{background:linear-gradient(#8e8e93,#5a5a5f)}
+.i-spot{background:#121212;border:1px solid #2b2b2b}
+.i-jet{background:linear-gradient(135deg,#d4d4d8,#8b0000)}
+.i-porsche{background:linear-gradient(#1b1b1b,#000);border:1px solid #444}
+.i-deli{background:linear-gradient(#00ccbc,#00a397)}
+.i-coutts{background:linear-gradient(#1f2a44,#0e1424)}
+.i-self{background:linear-gradient(#ffe600,#f5c400)}
+.i-wa{background:linear-gradient(#5ef07a,#1faa52)}
+.i-ig{background:linear-gradient(45deg,#f9a03f,#e1306c 50%,#833ab4)}
+.i-tele{background:linear-gradient(135deg,#1a1a1a,#3a0b0b);border:1px solid var(--red)}
+
+/* ---------- 폴더 ---------- */
+#s-folder{background:transparent;align-items:center;justify-content:center;transform:none}
+.folder-back{position:absolute;inset:0;z-index:0}
+.folder-panel{position:relative;z-index:1;width:min(300px,82%);border-radius:34px;padding:22px 18px 18px;
+  background:rgba(60,60,66,.55);backdrop-filter:blur(30px);transform:scale(.85);transition:transform .24s ease}
+#s-folder.active .folder-panel{transform:scale(1)}
+.folder-title{text-align:center;font-size:26px;font-weight:700;margin-bottom:4px}
+.folder-sub{text-align:center;font-size:12px;color:#c9c9ce;margin-bottom:16px}
+.folder-panel .grid{grid-template-columns:repeat(3,1fr);margin:0}
+
+/* ---------- 카톡 ---------- */
+.k-scr{background:#1b1b1d}
+.k-tabs{display:flex;border-top:1px solid var(--line);flex-shrink:0;background:#151517}
+.k-tabs button{flex:1;min-height:52px;font-size:12px;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.k-tabs button.on{color:var(--text)}
+.k-tabs button span{font-size:20px}
+.k-me{display:flex;align-items:center;gap:14px;padding:14px 18px;width:100%;text-align:left}
+.k-defav{width:56px;height:56px;border-radius:22px;background:#9bb5c8;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;flex-shrink:0}
+.k-defav i{display:block;width:30px;height:30px;border-radius:50% 50% 0 0;background:#e6eef4;margin-bottom:-4px;position:relative}
+.k-defav i::before{content:"";position:absolute;left:8px;top:-15px;width:14px;height:14px;border-radius:50%;background:#e6eef4}
+.k-sq{border-radius:18px!important}
+.pin{color:var(--kakao)}
+#kroom{background:#2b3540}
+.chat-body{flex:1;overflow-y:auto;padding:12px 12px 10px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.daytag{text-align:center;margin:6px 0 14px}
+.daytag span{font-size:11px;background:rgba(0,0,0,.25);padding:4px 12px;border-radius:12px;color:#dfe6ec}
+.msg{display:flex;gap:8px;margin-bottom:10px;align-items:flex-start}
+.msg.me{flex-direction:row-reverse}
+.msg .who{font-size:12px;color:#d8dee4;margin-bottom:4px}
+.msg .line{display:flex;align-items:flex-end;gap:6px}
+.msg.me .line{flex-direction:row-reverse}
+.bubble{max-width:min(240px,64vw);padding:9px 12px;border-radius:16px;font-size:15px;line-height:1.45;word-break:break-word;white-space:pre-wrap}
+.msg.them .bubble{background:#fff;color:#111;border-top-left-radius:4px}
+.msg.me .bubble{background:var(--kakao);color:#111;border-top-right-radius:4px}
+.msg .time{font-size:10px;color:#b9c3cc;flex-shrink:0;margin-bottom:2px}
+.emo{width:120px;height:120px;border-radius:18px;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;animation:bob 1.6s ease-in-out infinite}
+.emo .cat{font-size:64px;line-height:1}
+.emo .glass{position:absolute;top:30px;font-size:30px}
+.emo .hrt{position:absolute;font-size:20px;animation:fly 1.6s ease-in-out infinite}
+.emo .h1{right:4px;top:6px}.emo .h2{right:22px;top:-6px;animation-delay:.5s;font-size:14px}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes fly{0%{opacity:0;transform:translateY(8px) scale(.6)}50%{opacity:1}100%{opacity:0;transform:translateY(-12px) scale(1.1)}}
+.chat-input{display:flex;gap:8px;padding:8px 10px;background:#1c1f24;flex-shrink:0;align-items:center}
+.chat-input input{flex:1;min-height:44px;border-radius:22px;background:#2b3038;padding:0 16px;font-size:15px;min-width:0}
+.chat-input .send{width:44px;height:44px;border-radius:50%;background:var(--kakao);color:#111;font-size:18px;font-weight:800;flex-shrink:0}
+.kprof{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  background:linear-gradient(180deg,#3a4a5c,#1b1b1d)}
+.kprof .big{width:110px;height:110px;border-radius:40px;font-size:54px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.kprof .nm{font-size:22px;font-weight:700}
+.kprof .st{font-size:14px;color:#c9d1d8;margin-top:6px;min-height:20px}
+.kprof .acts{display:flex;gap:28px;margin-top:40px}
+.kprof .acts button{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;min-width:64px;min-height:64px}
+.kprof .acts span{font-size:26px}
+
+/* ---------- 왓츠앱 ---------- */
+#s-waroom .chat-body{background:#0b141a;background-image:radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px);background-size:14px 14px}
+.wa-b{background:#202c33;color:#e9edef;border-radius:12px;border-top-left-radius:4px;padding:10px 12px;max-width:86%;font-size:14.5px;line-height:1.5}
+.wa-b .tr{margin-top:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.1);color:#aebac1;font-size:13px}
+.wa-b .tm{text-align:right;font-size:10px;color:#8696a0;margin-top:4px}
+.unread-bar{text-align:center;margin:10px 0}
+.unread-bar span{font-size:12px;background:#182229;color:#8696a0;padding:6px 14px;border-radius:8px}
+.wa-count{min-width:22px;height:22px;border-radius:11px;background:#25D366;color:#111;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;padding:0 6px}
+.wa-count.mute{background:#444;color:#ddd}
+
+/* ---------- 통화 ---------- */
+.missed .t{color:#FF453A}
+.cdet{display:flex;flex-direction:column;align-items:center;padding:24px 16px 10px;text-align:center}
+.cdet .av{width:92px;height:92px;font-size:34px;margin-bottom:12px}
+.cdet .nm{font-size:24px;font-weight:700}
+.cdet .sb{font-size:14px;color:var(--muted);margin-top:4px}
+
+/* ---------- 사진 ---------- */
+.ph-stats{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 4px}
+.ph-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:0 3px 16px}
+.ph{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:clamp(26px,9vw,36px);position:relative;overflow:hidden;width:100%}
+.ph:active{filter:brightness(.75)}
+.ph .fv{position:absolute;left:5px;bottom:4px;font-size:12px;pointer-events:none}
+.ph .cap{position:absolute;right:5px;bottom:4px;left:22px;text-align:right;font-size:9.5px;color:rgba(255,255,255,.85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 3px rgba(0,0,0,.6);pointer-events:none}
+.ph.more{background:#1c1c1e;font-size:15px;font-weight:700;color:#ccc;flex-direction:column;gap:2px}
+.ph.more small{font-size:10px;color:var(--muted);font-weight:500}
+.viewer{flex:1;display:flex;flex-direction:column;background:#000}
+.viewer .art{flex:1;min-height:200px;display:flex;align-items:center;justify-content:center;font-size:clamp(70px,24vw,110px)}
+.viewer .meta{padding:14px 18px 6px}
+.viewer .meta h2{font-size:18px;margin-bottom:6px}
+.viewer .meta p{font-size:14px;color:#cfcfd4;line-height:1.55}
+.viewer .vbar{display:flex;justify-content:space-around;padding:6px 10px 8px}
+.viewer .vbar button{font-size:22px;min-width:56px;min-height:48px;border-radius:12px}
+.viewer .vbar button.on{color:#FF375F}
+
+/* ---------- 메모 ---------- */
+#s-notes,#s-note{background:#000}
+.memo-l .t{font-size:16px}
+.memo-body{padding:6px 20px 20px}
+.memo-body h2{font-size:26px;font-weight:800;margin:6px 0 4px}
+.memo-body .d{font-size:12px;color:var(--muted);margin-bottom:16px}
+.memo-li{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #1d1d20;font-size:16px;line-height:1.5;width:100%;text-align:left;min-height:44px}
+.memo-li .ck{width:22px;height:22px;border-radius:50%;border:1.5px solid #E0B84B;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#000}
+.memo-li.done .ck{background:#E0B84B}
+.memo-li.done .tx{color:#777;text-decoration:line-through}
+
+/* ---------- 사파리 ---------- */
+.addr{margin:8px 14px 4px;min-height:44px;border-radius:12px;background:#1f1f22;display:flex;align-items:center;gap:8px;padding:0 14px;font-size:14px;color:#ddd;overflow:hidden}
+.addr span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srch-res{padding:6px 14px 20px}
+.srch-res .q{font-size:20px;font-weight:700;line-height:1.35;margin:10px 4px 14px;word-break:break-word}
+
+/* ---------- 시계/알람 ---------- */
+.alarm{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--line)}
+.alarm .big{font-size:54px;font-weight:300;letter-spacing:-1px;font-variant-numeric:tabular-nums}
+.alarm .big small{font-size:22px;margin-right:4px}
+.alarm .s{font-size:14px;color:var(--muted)}
+.sw{width:56px;height:34px;border-radius:17px;background:#39393d;position:relative;flex-shrink:0;min-height:44px;background-clip:content-box;padding:5px 0}
+.sw::after{content:"";position:absolute;top:7px;left:2px;width:30px;height:30px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 2px 4px rgba(0,0,0,.3)}
+.sw.on{background-color:var(--green)}
+.sw.on::after{left:24px}
+.sw.off{opacity:1}
+.alarm.dim .big,.alarm.dim .s{opacity:.4}
+
+/* ---------- 스포티파이 ---------- */
+.spot{flex:1;display:flex;flex-direction:column;padding:16px 24px 10px;background:linear-gradient(180deg,#3b0d0d 0%,#121212 60%)}
+.cover{aspect-ratio:1;width:100%;max-width:300px;max-height:36vh;margin:6px auto 18px;border-radius:10px;
+  background:radial-gradient(circle at 30% 30%,#2b2b2b,#000);display:flex;align-items:center;justify-content:center;font-size:70px;box-shadow:0 16px 40px rgba(0,0,0,.6)}
+.cover.spin span{animation:spin 6s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.song{font-size:21px;font-weight:800}
+.artist{font-size:14px;color:#b3b3b3;margin-top:3px}
+.prog{height:4px;border-radius:2px;background:#4d4d4d;margin:18px 0 6px;overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:#fff;border-radius:2px}
+.ptime{display:flex;justify-content:space-between;font-size:11px;color:#b3b3b3;font-variant-numeric:tabular-nums}
+.pctl{display:flex;align-items:center;justify-content:space-around;margin-top:12px}
+.pctl button{font-size:24px;min-width:48px;min-height:48px;border-radius:50%}
+.pctl .play{width:64px;height:64px;background:#fff;color:#000;font-size:24px}
+
+/* ---------- 기타 앱 ---------- */
+.hero{margin:12px 14px;border-radius:20px;padding:18px;position:relative;overflow:hidden}
+.hero .k{font-size:12px;opacity:.8}
+.hero .v{font-size:26px;font-weight:800;margin-top:4px;line-height:1.2}
+.route{display:flex;align-items:center;justify-content:space-between;margin-top:14px}
+.route .ap{font-size:30px;font-weight:800}
+.route .cn{font-size:12px;opacity:.75}
+.route .pl{flex:1;text-align:center;font-size:20px;position:relative}
+.route .pl::before{content:"";position:absolute;left:10%;right:10%;top:50%;border-top:1.5px dashed rgba(255,255,255,.4)}
+.route .pl span{position:relative;background:transparent;padding:0 6px}
+.cart-i{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);width:100%;text-align:left;min-height:64px}
+.cart-i .th{width:56px;height:56px;border-radius:12px;background:#f4f1ea;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.deli-g{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:0 14px 16px}
+.deli-c{background:var(--panel2);border-radius:16px;padding:16px 10px;text-align:center;min-height:96px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.deli-c .e{font-size:32px}.deli-c .n{font-size:12px;color:#ccc}
+.phr{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);width:100%;text-align:left;min-height:64px}
+.phr .ko{font-size:20px;font-weight:700}
+.phr .ro{font-size:13px;color:#2be08a;margin-top:2px}
+.phr .nt{font-size:12px;color:var(--muted);margin-top:3px}
+.phr .spk{font-size:20px;width:44px;height:44px;border-radius:50%;background:#1f2a24;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ig-head{display:flex;align-items:center;gap:18px;padding:16px 18px 8px}
+.ig-av{width:84px;height:84px;border-radius:50%;padding:3px;background:linear-gradient(45deg,#f9a03f,#e1306c,#833ab4);flex-shrink:0}
+.ig-av div{width:100%;height:100%;border-radius:50%;background:#111;border:3px solid #000;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px}
+.ig-stats{flex:1;display:grid;grid-template-columns:repeat(3,1fr);text-align:center}
+.ig-stats b{display:block;font-size:17px}
+.ig-stats span{font-size:12px;color:#bbb}
+.ig-bio{padding:4px 18px 12px;font-size:14px;line-height:1.5}
+.ig-empty{margin:4px 14px 16px;border:1px dashed #333;border-radius:14px;padding:26px 16px;text-align:center;color:var(--muted);font-size:14px;line-height:1.6}
+.tele-g{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 14px 14px}
+.tele-c{background:#121214;border:1px solid #2a1212;border-radius:16px;padding:14px}
+.tele-c .k{font-size:11px;color:#ff7070;letter-spacing:.06em;text-transform:uppercase}
+.tele-c .v{font-size:22px;font-weight:800;margin-top:6px;font-variant-numeric:tabular-nums}
+.tele-c .s{font-size:12px;color:var(--muted);margin-top:2px}
+.stor{height:10px;border-radius:5px;background:#2c2c30;overflow:hidden;margin:10px 0 6px;display:flex}
+.stor i{display:block;height:100%}
+.vf{flex:1;position:relative;background:radial-gradient(circle at 50% 45%,#1d1d22,#000 70%);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.vf .grid-l{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,transparent 33.1%,rgba(255,255,255,.12) 33.3%,transparent 33.5%,transparent 66.4%,rgba(255,255,255,.12) 66.6%,transparent 66.8%),
+  linear-gradient(180deg,transparent 33.1%,rgba(255,255,255,.12) 33.3%,transparent 33.5%,transparent 66.4%,rgba(255,255,255,.12) 66.6%,transparent 66.8%)}
+.vf .tgt{font-size:15px;color:rgba(255,255,255,.55);text-align:center;line-height:1.6;pointer-events:none}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.flash.go{animation:fl .35s ease}
+@keyframes fl{0%{opacity:.9}100%{opacity:0}}
+.cam-bar{display:flex;align-items:center;justify-content:space-around;padding:14px 20px 10px;background:#000;flex-shrink:0}
+.cam-bar .mode{display:flex;gap:16px;font-size:12px;color:#aaa;justify-content:center;padding:10px 0 0;background:#000}
+.shutter{width:72px;height:72px;border-radius:50%;border:4px solid #fff;padding:4px;background-clip:content-box;background-color:#fff}
+.shutter:active{transform:scale(.9)}
+.cam-thumb{width:48px;height:48px;border-radius:10px;background:linear-gradient(180deg,#5b2a5e,#ff9a5a);display:flex;align-items:center;justify-content:center;font-size:20px}
+
+/* ---------- 홈 인디케이터 / 토스트 ---------- */
+.homebtn{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:180px;height:var(--hb);z-index:60;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;touch-action:manipulation}
+.hb-line{width:136px;height:5px;border-radius:3px;background:rgba(255,255,255,.85);transition:transform .15s}
+.homebtn:active .hb-line{transform:scaleX(.85)}
+.toast{position:absolute;left:50%;top:64px;transform:translate(-50%,-14px);z-index:70;max-width:86%;
+  background:rgba(30,30,33,.96);border:1px solid rgba(255,255,255,.08);color:#fff;font-size:13.5px;line-height:1.45;
+  padding:10px 16px;border-radius:18px;opacity:0;transition:opacity .2s,transform .2s;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div class="stage">
+<div class="phone" id="phone">
+
+  <!-- 상태바 (장식) -->
+  <div class="island" aria-hidden="true"></div>
+  <div class="statusbar" aria-hidden="true">
+    <span id="sbTime">17:18</span>
+    <div class="sb-right">
+      <span class="moon">☾</span>
+      <span class="sig"><i></i><i></i><i></i><i></i></span>
+      <span>5G</span>
+      <span class="bat"><span class="bat-box"><span class="bat-fill"></span></span>82</span>
+    </div>
+  </div>
+
+  <div class="screens">
+
+    <!-- 잠금화면 -->
+    <section class="screen" id="s-lock" data-action="unlock" aria-label="잠금화면">
+      <div class="lock-wall" aria-hidden="true">
+        <div class="sun"></div><div class="sea"></div>
+        <div class="duo">🐰💋</div>
+        <div class="cap">소예르 항구 노을 · 기습 볼 뽀뽀 셀카</div>
+      </div>
+      <div class="lock-top">
+        <div class="lk">🔒</div>
+        <div class="lock-date" id="lockDate"></div>
+        <div class="lock-time" id="lockTime">17:18</div>
+      </div>
+      <div class="lock-focus">☾ 방해금지 · 🐰 루비만 허용</div>
+      <div class="lock-hint">탭하여 잠금 해제</div>
+    </section>
+
+    <!-- 홈 -->
+    <section class="screen" id="s-home" aria-label="홈 화면">
+      <div class="wall" aria-hidden="true"></div>
+      <div class="body home-body">
+        <button class="widget tap" data-toast="런던 · 서울 · 마요르카 — 미니멀 날씨 위젯">
+          <div class="wt"><span>🌍 날씨</span><span>London · Seoul · Mallorca</span></div>
+          <div class="wx-cols">
+            <div class="wx-c"><div class="city">London</div><div class="tm" id="wxLon">--:--</div><div class="ko">런던</div></div>
+            <div class="wx-c"><div class="city">Seoul</div><div class="tm" id="wxSeo">--:--</div><div class="ko">서울</div></div>
+            <div class="wx-c"><div class="city">Mallorca</div><div class="tm" id="wxPmi">--:--</div><div class="ko">마요르카</div></div>
+          </div>
+        </button>
+
+        <div class="grid">
+          <button class="app" data-open="s-photos"><span class="ic i-photos">🌸</span><span class="lbl">사진</span></button>
+          <button class="app" data-open="s-notes"><span class="ic i-notes">📝</span><span class="lbl">메모</span></button>
+          <button class="app" data-open="s-clock"><span class="ic i-clock">⏰</span><span class="lbl">시계</span></button>
+          <button class="app" data-open="s-settings"><span class="ic i-set">⚙️</span><span class="lbl">설정</span></button>
+        </div>
+
+        <div class="vip-row">
+          <button class="app" data-open="s-papago"><span class="crown">VIP</span><span class="ic i-papago">🗣️</span><span class="lbl">Papago</span></button>
+        </div>
+
+        <div class="grid">
+          <button class="app" data-open="s-folder">
+            <span class="ic folder-ic"><span class="i-wa">💬</span><span class="i-ig">📷</span><span class="i-tele">📈</span><span></span><span class="badge">284</span></span>
+            <span class="lbl">Work</span>
+          </button>
+          <button class="app" data-open="s-spotify"><span class="ic i-spot">🎧</span><span class="lbl">Spotify</span></button>
+          <button class="app" data-open="s-jet"><span class="ic i-jet">✈️</span><span class="lbl">VistaJet</span></button>
+          <button class="app" data-open="s-porsche"><span class="ic i-porsche">🏎️</span><span class="lbl">My Porsche</span></button>
+          <button class="app" data-open="s-deli"><span class="ic i-deli">🛵</span><span class="lbl">Deliveroo</span></button>
+          <button class="app" data-open="s-coutts"><span class="ic i-coutts">🏦</span><span class="lbl">Coutts</span></button>
+          <button class="app" data-open="s-self"><span class="ic i-self">🛍️</span><span class="lbl">Selfridges</span></button>
+        </div>
+      </div>
+      <div class="dock">
+        <button class="app" data-open="s-phone" aria-label="전화"><span class="ic i-phone">📞</span><span class="lbl">전화</span></button>
+        <button class="app" data-open="s-safari" aria-label="Safari"><span class="ic i-safari">🧭</span><span class="lbl">Safari</span></button>
+        <button class="app" data-open="s-camera" aria-label="카메라"><span class="ic i-cam">📷</span><span class="lbl">카메라</span></button>
+        <button class="app" data-open="s-kakao" aria-label="KakaoTalk"><span class="ic i-kakao">💬</span><span class="lbl">KakaoTalk</span></button>
+      </div>
+    </section>
+
+    <!-- Work 폴더 -->
+    <section class="screen" id="s-folder" aria-label="Work 폴더">
+      <button class="folder-back" data-action="back" aria-label="폴더 닫기"></button>
+      <div class="folder-panel">
+        <div class="folder-title">Work</div>
+        <div class="folder-sub">알림 284 — 전부 무시 중</div>
+        <div class="grid">
+          <button class="app" data-open="s-wa"><span class="ic i-wa">📞<span class="badge">47</span></span><span class="lbl">WhatsApp</span></button>
+          <button class="app" data-open="s-ig"><span class="ic i-ig">📷</span><span class="lbl">Instagram</span></button>
+          <button class="app" data-open="s-tele"><span class="ic i-tele">📈</span><span class="lbl">Raven Telemetry</span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 전화 -->
+    <section class="screen" id="s-phone" aria-label="전화">
+      <header class="appbar"><button class="back tap" data-action="back"><b>‹</b>홈</button><h1>최근 기록</h1><span class="sp"></span></header>
+      <div class="body">
+        <div class="bigtitle">최근 기록</div>
+        <div class="card" id="callList"></div>
+        <div class="note-box">☾ 상시 방해금지 모드 · VIP 예외 허용: <b style="color:var(--pink)">루비 1명</b></div>
+      </div>
+    </section>
+    <section class="screen" id="s-calldet" aria-label="통화 상세">
+      <header class="appbar"><button class="back tap" data-action="back"><b>‹</b>최근 기록</button><h1></h1><span class="sp"></span></header>
+      <div class="body" id="callDetBody"></div>
+    </section>
+
+    <!-- 카카오톡 -->
+    <section class="screen k-scr" id="s-kakao" aria-label="카카오톡">
+      <header class="appbar" style="background:#1b1b1d"><button class="back tap" data-action="back"><b>‹</b>홈</button><h1>KakaoTalk</h1><span class="sp"></span></header>
+      <div class="body">
+        <div class="pane on" data-pane="kk:friends">
+          <button class="k-me tap" data-toast="기본 프사 · 상태메시지 없음">
+            <span class="k-defav"><i></i></span>
+            <span><span style="display:block;font-size:17px;font-weight:700">NINE</span><span style="font-size:13px;color:var(--muted)">상태메시지 없음</span></span>
+          </button>
+          <div class="section-t">친구 2</div>
+          <div id="kFriends"></div>
+        </div>
+        <div class="pane" data-pane="kk:chats">
+          <div class="section-t">채팅</div>
+          <button class="row tap" data-chat="rabbit">
+            <span class="av rabbit k-sq">🐰</span>
+            <span class="main"><span class="t">Rabbit 🐰 <span class="pin">📌</span> <span style="font-size:12px">🔔</span></span><span class="s">이모티콘을 보냈습니다.</span></span>
+            <span class="r">오전 9:46</span>
+          </button>
+          <div class="note-box" style="margin-top:12px">📌 상단 고정 · 알림음이 켜진 유일한 채팅방</div>
+        </div>
+      </div>
+      <nav class="k-tabs">
+        <button class="on" data-tab="kk:friends"><span>👤</span>친구</button>
+        <button data-tab="kk:chats"><span>💬</span>채팅</button>
+      </nav>
+    </section>
+    <section class="screen" id="s-kprof" aria-label="카카오 프로필">
+      <header class="appbar" style="background:#3a4a5c;border:0"><button class="back tap" data-action="back"><b>‹</b>친구</button><h1></h1><span class="sp"></span></header>
+      <div class="kprof" id="kprofBody"></div>
+    </section>
+    <section class="screen" id="kroom" aria-label="Rabbit 채팅방">
+      <header class="appbar" style="background:#2b3540;border-color:#3a4652"><button class="back tap" data-action="back"><b>‹</b>채팅</button><h1>Rabbit 🐰</h1><button class="tap" data-toast="📌 상단 고정 · 🔔 알림음 켜짐" style="font-size:18px">🔔</button></header>
+      <div class="chat-body" id="kroomBody"></div>
+      <form class="chat-input" id="kForm" autocomplete="off">
+        <input id="kInput" type="text" placeholder="메시지 입력" maxlength="300">
+        <button class="send tap" type="submit" aria-label="보내기">↑</button>
+      </form>
+    </section>
+
+    <!-- WhatsApp -->
+    <section class="screen" id="s-wa" aria-label="WhatsApp">
+      <header class="appbar" style="background:#111b21"><button class="back tap" data-action="back"><b>‹</b>Work</button><h1>WhatsApp</h1><span class="sp"></span></header>
+      <div class="body" style="background:#111b21">
+        <div class="note-box" style="background:#0b141a;margin-top:12px">안 읽은 채팅방 <b style="color:#25D366">47개</b> · 대부분 열어보지 않음</div>
+        <div id="waList"></div>
+      </div>
+    </section>
+    <section class="screen" id="s-waroom" aria-label="WhatsApp 채팅">
+      <header class="appbar" style="background:#202c33;border:0"><button class="back tap" data-action="back"><b>‹</b>채팅</button><h1 id="waTitle"></h1><span class="sp"></span></header>
+      <div class="chat-body" id="waBody"></div>
+    </section>
+
+    <!-- Instagram -->
+    <section class="screen" id="s-ig" aria-label="Instagram">
+      <header class="appbar"><button class="back tap" data-action="back"><b>‹</b>Work</button><h1>Instagram</h1><span class="sp"></span></header>
+      <div class="body">
+        <div class="seg">
+          <button class="on" data-tab="ig:main">@nine_blackwood</button>
+          <button data-tab="ig:sub">🔒 부계정</button>
+        </div>
+        <div class="pane on" data-pane="ig:main">
+          <div class="ig-head">
+            <div class="ig-av"><div>N9</div></div>
+            <div class="ig-stats">
+              <div><b>PR</b><span>게시물</span></div>
+              <div><b>580만</b><span>팔로워</span></div>
+              <div><b>—</b><span>팔로잉</span></div>
+            </div>
+          </div>
+          <div class="ig-bio"><b>nine_blackwood</b> <span style="color:#3897f0">✔︎</span><br><span style="color:#bbb">공식 계정 · Raven No.9</span></div>
+          <div class="ig-empty">📌 본인은 피드를 올리지 않음<br>게시물 관리는 PR팀에 전부 위임</div>
+        </div>
+        <div class="pane" data-pane="ig:sub">
+          <div class="ig-head">
+            <div class="ig-av" style="background:#333"><div>🔒</div></div>
+            <div class="ig-stats">
+              <div><b>0</b><span>게시물</span></div>
+              <div><b>비공개</b><span>계정</span></div>
+              <div><b>🐰</b><span>관심</span></div>
+            </div>
+          </div>
+          <div class="ig-empty">비공개 부계정<br>용도: <b style="color:var(--pink)">루비 인스타 염탐 전용</b></div>
+          <div class="btnrow"><button class="btn tap" data-toast="👀 루비 피드 새로고침… 오늘도 몰래 정독 중">루비 피드 보기</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Raven Telemetry -->
+    <section class="screen" id="s-tele" aria-label="Raven Telemetry">
+      <header class="appbar" style="background:#0d0d0e"><button class="back tap" data-action="back"><b>‹</b>Work</button><h1>Raven Telemetry</h1><span class="sp"></span></header>
+      <div class="body" style="background:#0a0a0b">
+        <div class="hero" style="background:linear-gradient(135deg,#2a0909,#0e0e10);border:1px solid #3a1414">
+          <div class="k">RIDER · No.9</div>
+          <div class="v">NICK BLACKWOOD</div>
+          <div style="margin-top:10px"><span class="pill red">최근 접속: 상하이 예선 전날 · 3분</span></div>
+        </div>
+        <div class="tele-g">
+          <button class="tele-c tap" data-toast="누적 포인트 65 · 현재 순위 1위"><div class="k">누적 포인트</div><div class="v">65</div><div class="s">Championship</div></button>
+          <button class="tele-c tap" data-toast="현재 순위 1위"><div class="k">현재 순위</div><div class="v">P1</div><div class="s">1위</div></button>
+          <button class="tele-c tap" data-toast="다음 일정: Round 4 Spain (Barcelona GP) 예정" style="grid-column:span 2"><div class="k">다음 라운드</div><div class="v" style="font-size:18px">Round 4 · Spain</div><div class="s">Barcelona GP (예정)</div></button>
+        </div>
+        <div class="note-box">엔지니어링 그룹 채팅 <b>112개</b> 안 읽음 · 텔레메트리는 거의 열지 않음</div>
+      </div>
+    </section>
+
+    <!-- 사진 -->
+    <section class="screen" id="s-photos" aria-label="사진">
+      <header class="appbar"><button class="back tap" data-action="back"><b>‹</b>홈</button><h1>사진</h1><span class="sp"></span></header>
+      <div class="body">
+        <div class="bigtitle">라이브러리</div>
+        <div class="ph-stats">
+          <span class="pill">총 312장</span><span class="pill pink">최근 2주 270여 장 · 전부 루비</span><span class="pill red">❤️ 19</span>
+        </div>
+        <div class="seg">
+          <button class="on" data-tab="ph:recent">최근 2주</button>
+          <button data-tab="ph:fav">즐겨찾기</button>
+          <button data-tab="ph:past">과거</button>
+        </div>
+        <div class="pane on" data-pane="ph:recent"><div class="ph-grid" id="phRecent"></div></div>
+        <div class="pane" data-pane="ph:fav"><div class="ph-grid" id="phFav"></div></div>
+        <div class="pane" data-pane="ph:past"><div class="ph-grid" id="phPast"></div></div>
+      </div>
+    </section>
+    <section class="screen" id="s-photo" aria-label="사진 보기">
+      <header class="appbar" style="background:#000;border:0"><button class="back tap" data-action="back"><b>‹</b>사진</button><h1 id="phvTitle"></h1><span class="sp"></span></header>
+      <div class="viewer">
+        <div class="art" id="phvArt"></div>
+        <div class="meta"><h2 id="phvName"></h2><p id="phvDesc"></p></div>
+        <div class="vbar">
+          <button class="tap" data-action="share" aria-label="공유">⤴︎</button>
+          <button class="tap" id="phvFav" data-action="fav" aria-label="즐겨찾기">♥</button>
+          <button class="tap" data-action="lockwall" aria-label="배경화면">🖼️</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 메모 -->
+    <section class="screen" id="s-notes" aria-label="메모">
+      <header class="appbar" style="background:#000"><button class="back tap" data-action="back"><b>‹</b>홈</button><h1>메모</h1><span class="sp"></span></header>
+      <div class="body">
+        <div class="bigtitle">메모</div>
+        <div class="section-t">2개의 메모</div>
+        <div class="card memo-l" id="noteList"></div>
+      </div>
+    </section>
+    <section class="screen" id="s-note" aria-label="메모 상세">
+      <header class="appbar" style="background:#000"><button class="back tap" data-action="back" style="color:#E0B84B"><b>‹</b>메모</button><h1></h1><span class="sp"></span></header>
+      <div class="body"><div class="memo-body" id="noteBody"></div></div>
+    </section>
+
+    <!-- Safari -->
+    <section class="screen" id="s-safari" aria-label="Safari">
+      <header class="appbar"><button class="back tap" data-action="back"><b>‹</b>홈</button><h1>Safari</h1><span class="sp"></span></header>
+      <div class="body">
+        <div class="addr">🔍 <span>검색 또는 웹사이트 이름 입력</span></div>
+        <div style="padding:2px 18px 0"><span class="pill">개인정보 보호 모드 사용 안 함</span></div>
+        <div class="section-t">최근 검색어</div>
+        <div class="card" id="searchList"></div>
+      </div>
+    </section>
+    <section class="screen" id="s-search" aria-label="검색 상세">
+      <header class="appbar"><button class="back tap" data-action="back"><b>‹</b>Safari</button><h1>검색</h1><span class="sp"></span></header>
+      <div class="body" id="searchBody"></div>
+    </section>
+
+    <!-- 시계 -->
+    <section class="screen" id="s-clock" aria-label="시계">
+      <header class="appbar" style="background:#000"><button class="back tap" data-action="back"><b>‹</b>홈</button><h1>알람</h1><span class="sp"></span></header>
+      <div class="body" style="background:#000">
+        <div class="bigtitle">알람</div>
+        <div class="alarm" id="alarmRow">
+          <div><div class="big"><small>오전</small>6:45</div><div class="s">진동만 · 루비 아침 차려주기</div></div>
+          <button class="sw on" data-toggle="alarm" aria-label="알람 켜기/끄기"></button>
+        </div>
+        <div class="note-box" style="margin-top:14px">평소엔 정오까지 늦잠. 마요르카에서만 조용히 진동으로 맞춰 둔 단 하나의 알람.</div>
+      </div>
+    </section>
+
+    <!-- 설정 -->
+    <section class="screen" id="s-settings" aria-label="설정">
+      <header class="appbar"><button class="back tap" data-action="back"><b>‹</b>홈</button><h1>설정</h1><span class="sp"></span></header>
+      <div class="body">
+        <div class="card" style="margin-top:12px">
+          <button class="row tap" data-toast="iPhone 17 Pro Max · 블랙 티타늄 · 1TB">
+            <span class="av" style="background:#222">📱</span>
+            <span class="main"><span class="t">NINE's iPhone</span><span class="s">iPhone 17 Pro Max · 블랙 티타늄 · 1TB</span></span><span class="chev">›</span>
+          </button>
+        </div>
+        <div class="section-t">집중 모드</div>
+        <div class="card">
+          <div class="row"><span class="main"><span class="t">☾ 방해금지 (상시)</span><span class="s">VIP 예외: 🐰 루비 1명</span></span><button class="sw on" data-toggle="dnd" aria-label="방해금지"></button></div>
+          <button class="row tap" data-toast="패독 복귀 시 잠금화면이 자동으로 바뀌도록 연동 완료"><span class="main"><span class="t">🏁 레이스 집중 모드</span><span class="s">단축어 · 잠금화면 자동 변경</span></span><span class="chev">›</span></button>
+        </div>
+        <div class="section-t">기기</div>
+        <div class="card">
+          <button class="row tap" data-toast="포르쉐 맥세이프 거치대에서 상시 충전 중"><span class="main"><span class="t">🔋 배터리 82%</span><span class="s">포르쉐 맥세이프 거치대 상시 충전</span></span><span class="chev">›</span></button>
+          <button class="row tap" data-toast="142GB 사용 / 1TB" style="display:block">
+            <span class="t" style="display:block">💾 저장공간</span>
+            <span class="stor"><i style="width:14%;background:var(--red)"></i></span>
+            <span class="s" style="display:block">142GB / 1TB 사용</span>
+          </button>
+          <button class="row tap" data-toast="생폰 주의자였지만 키링 고리 때문에 케이스 착용"><span class="main"><span class="t">🖤 매트 블랙 초슬림 케이스</span><span class="s">루비와 맞춘 미니 커플 헬멧 키링 🪖</span></span><span class="chev">›</span></button>
+          <button class="row tap" data-action="lock"><span class="main"><span class="t">🌅 배경화면 · 잠금화면 보기</span><span class="s">루비와의 노을 볼 뽀뽀 셀카</span></span><span class="chev">›</span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Papago -->
+    <section class="screen" id="s-papago" aria-label="Papago">
+      <header class="appbar" style="background:#0f1a14"><button class="back tap" data-action="back"><b>‹</b>홈</button><h1>Papago</h1><span class="sp"></span></header>
+      <div class="body" style="background:#0c120f">
+        <div class="hero" style="background:linear-gradient(135deg,#12a86a,#0b5e3d)">
+          <div class="k">홈 화면 정중앙 VIP석</div>
+          <div class="v">한국어 특훈 중 🇰🇷</div>
+        </div>
+        <div class="section-t">저장한 표현 · 탭하면 발음 재생</div>
+        <div class="card" id="phraseList" style="background:#121a16"></div>
+      </div>
+    </section>
+
+    <!-- 카메라 -->
+    <section class="screen" id="s-camera" aria-label="카메라" style="background:#000">
+      <header class="appbar" style="background:#000;border:0"><button class="back tap" data-action="back"><b>‹</b>홈</button><h1 style="font-size:13px;color:#ffd60a">PHOTO</h1><span class="sp"></span></header>
+      <div class="vf">
+        <div class="grid-l"></div>
+        <div class="tgt">피사체 대기 중…<br>🐰</div>
+        <div class="flash" id="flash"></div>
+      </div>
+      <div class="cam-bar">
+        <button class="cam-thumb tap" data-open="s-photos" aria-label="사진 보기">🐰</button>
+        <button class="shutter" data-action="shutter" aria-label="셔터"></button>
+        <button class="tap" data-toast="전면 카메라 — 셀카는 루비랑 같이 찍을 때만" style="font-size:22px;width:48px;height:48px;border-radius:50%;background:#222">🔄</button>
+      </div>
+    </section>
+
+    <!-- Spotify -->
+    <section class="screen" id="s-spotify" aria-label="Spotify">
+      <header class="appbar" style="background:#3b0d0d;border:0"><button class="back tap" data-action="back"><b>‹</b>홈</button><h1>지금 재생 중</h1><span class="sp"></span></header>
+      <div class="spot">
+        <div class="cover" id="cover"><span>🖤</span></div>
+        <div class="song">I Wanna Be Yours</div>
+        <div class="artist">Arctic Monkeys</div>
+        <div class="prog"><i id="progBar"></i></div>
+        <div class="ptime"><span id="pCur">0:00</span><span>3:04</span></div>
+        <div class="pctl">
+          <button class="tap" data-action="restart" aria-label="처음부터">⏮</button>
+          <button class="play tap" data-action="play" id="playBtn" aria-label="재생">▶</button>
+          <button class="tap" data-toast="이 곡만 반복 재생 중 🔁" aria-label="다음">⏭</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- VistaJet -->
+    <section class="screen" id="s-jet" aria-label="VistaJet">
+      <header class="appbar"><button class="back tap" data-action="back"><b>‹</b>홈</button><h1>VistaJet</h1><span class="sp"></span></header>
+      <div class="body">
+        <div class="section-t">최근 비행</div>
+        <div class="hero" style="background:linear-gradient(135deg,#2b2b30,#5a0f0f)">
+          <div class="k">전용기 · Bombardier</div>
+          <div class="route">
+            <div><div class="ap">PVG</div><div class="cn">Shanghai</div></div>
+            <div class="pl"><span>✈︎</span></div>
+            <div style="text-align:right"><div class="ap">PMI</div><div class="cn">Palma</div></div>
+          </div>
+        </div>
+        <div class="note-box">상하이 이후 올리버 단장에게 알리지 않고 스페인으로 잠적.</div>
+        <div class="btnrow"><button class="btn red tap" data-toast="최근 호출: Shanghai PVG → Palma PMI">전용기 호출</button></div>
+      </div>
+    </section>
+
+    <!-- My Porsche -->
+    <section class="screen" id="s-porsche" aria-label="My Porsche">
+      <header class="appbar" style="background:#000"><button class="back tap" data-action="back"><b>‹</b>홈</button><h1>My Porsche</h1><span class="sp"></span></header>
+      <div class="body" style="background:#000">
+        <div class="hero" style="background:linear-gradient(135deg,#1a1a1a,#000);border:1px solid #333;text-align:center;padding:34px 18px">
+          <div style="font-size:54px">🏎️</div>
+          <div class="v" style="font-size:20px;margin-top:10px">MY PORSCHE</div>
+          <div class="k" style="margin-top:6px">설치됨 · 최근 활동 기록 없음</div>
+        </div>
+        <div class="note-box">휴대폰은 포르쉐 맥세이프 거치대에서 상시 충전 중 (82%).</div>
+      </div>
+    </section>
+
+    <!-- Deliveroo -->
+    <section class="screen" id="s-deli" aria-label="Deliveroo">
+      <header class="appbar" style="background:#00352f"><button class="back tap" data-action="back"><b>‹</b>홈</button><h1>Deliveroo</h1><span class="sp"></span></header>
+      <div class="body" style="background:#00211d">
+        <div class="hero" style="background:linear-gradient(135deg,#00ccbc,#007f75)">
+          <div class="k">즐겨찾기</div>
+          <div class="v">영국 자택 주변<br>디저트 샵 도배 🍰</div>
+        </div>
+        <div class="deli-g" id="deliGrid"></div>
+      </div>
+    </section>
+
+    <!-- Coutts -->
+    <section class="screen" id="s-coutts" aria-label="Coutts">
+      <header class="appbar" style="background:#0e1424"><button class="back tap" data-action="back"><b>‹</b>홈</button><h1>Coutts</h1><span class="sp"></span></header>
+      <div class="body" style="background:#0a0f1c">
+        <div class="hero" style="background:linear-gradient(135deg,#1f2a44,#0b1020);border:1px solid #2a3758">
+          <div class="k">Private Banking</div>
+          <div class="v" style="letter-spacing:4px">£ •••••••</div>
+          <div style="margin-top:10px"><span class="pill">잔액 확인 안 함</span></div>
+        </div>
+        <div class="btnrow"><button class="btn tap" data-action="reveal">잔액 보기</button></div>
+      </div>
+    </section>
+
+    <!-- Selfridges -->
+    <section class="screen" id="s-self" aria-label="Selfridges 장바구니">
+      <header class="appbar"><button class="back tap" data-action="back"><b>‹</b>홈</button><h1>Selfridges Online</h1><span class="sp"></span></header>
+      <div class="body">
+        <div class="bigtitle">장바구니 🛒</div>
+        <div class="note-box">바르셀로나 GP 복귀 전, <b>실버스톤 자택</b>에 미리 채워 둘 것</div>
+        <div class="card" id="cartList"></div>
+        <div class="btnrow"><button class="btn red tap" data-toast="장바구니에 3개 상품 보관 중">상품 3개 · 결제 대기</button></div>
+      </div>
+    </section>
+
+  </div>
+
+  <button class="homebtn" id="homeBtn" data-action="home" aria-label="홈으로"><span class="hb-line"></span></button>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ================= 데이터 ================= */
+  var DATA = {
+    calls: [
+      { key:"rabbit", name:"Rabbit 🐰", sub:"루비", av:"🐰", avCls:"rabbit", when:"어제 18:55", type:"수신", dur:"1분 12초", missed:false,
+        memo:"항구 주차장에서 차 키 못 찾겠다고 투덜거리는 전화." },
+      { key:"oliver", name:"Oliver Grant", sub:"올리버 단장", av:"OG", avCls:"", when:"3일 전~어제", type:"부재중 전화 11통", dur:"—", missed:true, count:11,
+        memo:"전용기 타고 스페인으로 잠적한 뒤 가볍게 전부 씹음." },
+      { key:"villa", name:"Villa Concierge", sub:"데이아 별장 매니저", av:"🏡", avCls:"", when:"오늘 06:40", type:"발신", dur:"45초", missed:false,
+        memo:"루비 기상 전 갓 구운 베이커리 크루아상과 신선한 오렌지 공수 지시." },
+      { key:"jian", name:"Jian Yu", sub:"유지안", av:"JY", avCls:"", when:"2주 전", type:"발신", dur:"2분 10초", missed:false,
+        memo:"성수동 삼겹살집 위치 확인 및 작센링 사고 오해 해명 자리 사전 조율." }
+    ],
+    kakaoFriends: [
+      { key:"rabbit", name:"Rabbit 🐰", av:"🐰", cls:"rabbit", status:"" },
+      { key:"jian", name:"유지안", av:"JY", cls:"", status:"" }
+    ],
+    kakao: [
+      { from:"r", text:"야 너 내 속옷 왜 니 맘대로 골라놔 변태야?!?!", t:"오전 9:42" },
+      { from:"n", text:"You looked great in it though.", t:"오전 9:45" },
+      { from:"r", text:"닥쳐 진짜 죽는다👊👊", t:"오전 9:45" },
+      { from:"n", emo:true, t:"오전 9:46" }
+    ],
+    wa: {
+      oliver: { name:"Oliver Grant", unread:6, muted:false, time:"어제",
+        msg:"Nick, for fuck's sake answer your phone. If you two get photographed in Mallorca before PR preps, you're doing three extra sponsor shoots.",
+        tr:"닉, 제발 전화 좀 받아라. PR팀 준비 전에 마요르카에서 둘이 파파라치 찍히면 스폰서 화보 세 개 추가다." },
+      raven: { name:"Raven Engineering Group", unread:112, muted:true, time:"" }
+    },
+    photos: {
+      kiss:  { t:"소예르 노을 볼 뽀뽀 셀카", e:"🌅💋", fav:true, album:"최근 · 방금 저장",
+               bg:"linear-gradient(180deg,#2b1d4a 0%,#c2456b 45%,#ff9a5a 72%,#ffd59a 100%)",
+               d:"기습 볼 뽀뽀에 눈이 동그래진 루비와의 노을 셀카. 소예르 항구에서 에어드롭으로 낚아채 잠금화면으로 즉시 교체한 컷 — 4번째 볼 뽀뽀 컷." },
+      sleep: { t:"잠든 루비의 아침", e:"😴🐰", fav:true, album:"최근 2주",
+               bg:"linear-gradient(160deg,#ffe3ec,#f7b6c8 60%,#e8a0b6)",
+               d:"볼이 베개에 눌린 채 잠든 루비의 아침 얼굴." },
+      ramen: { t:"한강 라면", e:"🍜", fav:false, album:"최근 2주",
+               bg:"linear-gradient(160deg,#1d2b4a,#3a4f7a 55%,#f0a24a)",
+               d:"한강에서 불어 터진 라면 냄비 앞의 루비." },
+      gyro:  { t:"롯데월드 자이로드롭", e:"🎢🐰", fav:false, album:"최근 2주",
+               bg:"linear-gradient(180deg,#7ac8ff,#b38cff 60%,#ff8fab)",
+               d:"자이로드롭 타기 직전, 비장한 토끼 얼굴." },
+      cat:   { t:"성수동 네컷", e:"🐱📸", fav:false, album:"최근 2주",
+               bg:"repeating-linear-gradient(180deg,#f5f5f5 0 23%,#1a1a1a 23% 25%)",
+               d:"성수동에서 찍은 고양이 귀 네컷 사진." },
+      pool:  { t:"데이아 인피니티 풀", e:"🏊‍♀️💦", fav:false, album:"최근 2주",
+               bg:"linear-gradient(180deg,#87d4f5,#1e8fc7 60%,#0b5d8a)",
+               d:"데이아 별장 인피니티 풀에서 물장구치는 루비." },
+      bike:  { t:"비모타 바이크", e:"🏍️", fav:false, album:"과거",
+               bg:"linear-gradient(160deg,#1a1a1a,#000)",
+               d:"커스텀 올 매트 블랙 비모타 바이크." },
+      rain:  { t:"실버스톤의 비", e:"🌧️", fav:false, album:"과거",
+               bg:"linear-gradient(180deg,#6b7280,#374151 70%,#1f2937)",
+               d:"실버스톤 트랙 위, 비 내리는 하늘." },
+      pud:   { t:"스티키 토피 푸딩", e:"🍮", fav:false, album:"과거",
+               bg:"linear-gradient(160deg,#c08a4a,#6b3e1d)",
+               d:"먹다가 찍은 스티키 토피 푸딩 접시." }
+    },
+    recentOrder: ["kiss","sleep","ramen","gyro","cat","pool"],
+    pastOrder: ["bike","rain","pud"],
+    notes: [
+      { title:"Rabbit Manual", date:"최근 수정", items:[
+        "75A 아님 (말조심)",
+        "복숭아 아이스티 좋아함",
+        "요리 절대 시키지 말 것 (주방 폭발 위험)",
+        "삐지면 단것 물리거나 안아 올리면 3초 컷",
+        "추위 잘 탐 (가디건·담요 상시 대기)"
+      ]},
+      { title:"KR Vocab", date:"최근 수정", items:[
+        "Nu-na (효과 확실함, 얼굴 빨개짐)",
+        "Sa-rang-hae",
+        "Ki-seu-hae-jwo"
+      ]}
+    ],
+    searches: [
+      { q:"Korean pronunciation of Nuna hae-ju-se-yo", n:"10파운드 내기 직전 발음 특훈" },
+      { q:"Mallorca hidden cove no tourists April", n:"파파라치 없는 프라이빗 해변 탐색" },
+      { q:"Sóller best churrería open evening", n:"노을과 추로스 고민하는 루비용 5분 컷 동선 계산" },
+      { q:"Why do girls get mad when you pick non-see-through underwear", n:"오늘 아침 억울해서 검색해 봄" },
+      { q:"Korean spicy pork belly London restaurant", n:"실버스톤 복귀 후 루비 향수병 대비용" }
+    ],
+    phrases: [
+      { ko:"누나", ro:"Nu-na", nt:"효과 확실함, 얼굴 빨개짐" },
+      { ko:"누나 해주세요", ro:"Nuna hae-ju-se-yo", nt:"10파운드 내기 직전 발음 특훈" },
+      { ko:"사랑해", ro:"Sa-rang-hae", nt:"" },
+      { ko:"키스해줘", ro:"Ki-seu-hae-jwo", nt:"" }
+    ],
+    cart: [
+      { n:"복숭아 아이스티 박스", o:"루비 최애", e:"🍑" },
+      { n:"한국산 딸기 우유", o:"Imported · Korea", e:"🍓" },
+      { n:"푹신한 분홍색 토끼 실내화", o:"사이즈 240mm", e:"🐰" }
+    ],
+    deli: ["🍰","🍮","🧁","🍩","🍪","🍨"]
+  };
+
+  /* ================= 유틸 ================= */
+  function $(id){ return document.getElementById(id); }
+  function esc(s){
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+    });
+  }
+  function safe(fn){ try { fn(); } catch(err){ if (window.console) console.warn(err); } }
+
+  var toastTimer = null;
+  function showToast(msg){
+    var t = $("toast"); if (!t) return;
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.classList.remove("show"); }, 2000);
+  }
+
+  /* ================= 화면 전환 ================= */
+  var stack = ["s-lock"];
+  var navUntil = 0;
+  function canNav(){
+    var n = Date.now();
+    if (n < navUntil) return false;
+    navUntil = n + 260;
+    return true;
+  }
+  function renderStack(){
+    var top = stack[stack.length - 1];
+    var screens = document.querySelectorAll(".screen");
+    for (var i = 0; i < screens.length; i++){
+      var s = screens[i];
+      var on = s.id === top;
+      s.classList.toggle("active", on);
+      s.classList.toggle("under", top === "s-folder" && s.id === "s-home");
+      s.setAttribute("aria-hidden", on ? "false" : "true");
+    }
+  }
+  function openScreen(id){
+    var el = $(id);
+    if (!el) return;
+    if (stack[stack.length - 1] === id) return;
+    var idx = stack.indexOf(id);
+    if (idx !== -1) stack = stack.slice(0, idx + 1);
+    else stack.push(id);
+    var b = el.querySelector(".body");
+    if (b && idx === -1) b.scrollTop = 0;
+    renderStack();
+  }
+  function goBack(){
+    if (stack.length > 1){ stack.pop(); renderStack(); }
+    else if (stack[0] === "s-lock"){ goHome(); }
+  }
+  function goHome(){ stack = ["s-home"]; renderStack(); }
+
+  /* ================= 렌더 ================= */
+  function renderCalls(){
+    var html = "";
+    DATA.calls.forEach(function(c, i){
+      html += '<button class="row tap' + (c.missed ? " missed" : "") + '" data-call="' + i + '">' +
+        '<span class="av ' + esc(c.avCls) + '">' + esc(c.av) + '</span>' +
+        '<span class="main"><span class="t">' + esc(c.name) + (c.count ? " (" + c.count + ")" : "") + '</span>' +
+        '<span class="s">' + (c.missed ? "📵 " : (c.type === "발신" ? "↗ " : "↙ ")) + esc(c.type) + " · " + esc(c.sub) + '</span></span>' +
+        '<span class="r">' + esc(c.when) + '</span><span class="chev">ⓘ</span></button>';
+    });
+    $("callList").innerHTML = html;
+  }
+  function openCall(i){
+    var c = DATA.calls[i]; if (!c) return;
+    var scr = $("s-calldet");
+    scr.querySelector("h1").textContent = c.sub;
+    var callMsg = c.key === "oliver" ? "다시 걸기 취소 — 올리버 잔소리는 내일 들어도 지장 없음"
+                : c.key === "rabbit" ? "🐰 루비에게 전화 거는 중…" : esc(c.name) + "에게 전화 거는 중…";
+    $("callDetBody").innerHTML =
+      '<div class="cdet"><span class="av ' + esc(c.avCls) + '">' + esc(c.av) + '</span>' +
+      '<div class="nm">' + esc(c.name) + '</div><div class="sb">' + esc(c.sub) + '</div></div>' +
+      '<div class="btnrow">' +
+        '<button class="btn tap" data-toast="' + esc(callMsg) + '">📞 통화</button>' +
+        '<button class="btn tap" data-toast="' + esc(c.key === "rabbit" ? "카카오톡에서 이어서 대화하세요 🐰" : "메시지 앱은 Work 폴더에 방치 중") + '">💬 메시지</button>' +
+      '</div>' +
+      '<div class="card">' +
+        '<div class="row"><span class="main"><span class="s">일시</span><span class="t">' + esc(c.when) + '</span></span></div>' +
+        '<div class="row"><span class="main"><span class="s">유형</span><span class="t"' + (c.missed ? ' style="color:#FF453A"' : "") + '>' + esc(c.type) + '</span></span></div>' +
+        '<div class="row"><span class="main"><span class="s">통화 시간</span><span class="t">' + esc(c.dur) + '</span></span></div>' +
+      '</div>' +
+      '<div class="note-box">' + esc(c.memo) + '</div>';
+    openScreen("s-calldet");
+  }
+
+  function renderKakao(){
+    var fh = "";
+    DATA.kakaoFriends.forEach(function(f){
+      fh += '<button class="row tap" data-kfriend="' + esc(f.key) + '">' +
+        '<span class="av k-sq ' + esc(f.cls) + '">' + esc(f.av) + '</span>' +
+        '<span class="main"><span class="t">' + esc(f.name) + '</span>' +
+        (f.key === "rabbit" ? '<span class="s">📌 즐겨찾는 친구</span>' : "") + '</span></button>';
+    });
+    $("kFriends").innerHTML = fh;
+
+    var h = '<div class="daytag"><span>오늘</span></div>';
+    DATA.kakao.forEach(function(m){ h += kakaoMsgHTML(m); });
+    $("kroomBody").innerHTML = h;
+  }
+  function kakaoMsgHTML(m){
+    if (m.from === "r"){
+      return '<div class="msg them"><span class="av rabbit k-sq" style="width:40px;height:40px;font-size:20px">🐰</span>' +
+        '<div><div class="who">Rabbit 🐰</div><div class="line"><div class="bubble">' + esc(m.text) + '</div><span class="time">' + esc(m.t) + '</span></div></div></div>';
+    }
+    var inner = m.emo
+      ? '<button class="emo" data-toast="루비 약 올리려고 유료 결제한 한국 이모티콘 😎" aria-label="이모티콘"><span class="cat">🐈‍⬛</span><span class="glass">🕶️</span><span class="hrt h1">💗</span><span class="hrt h2">💗</span></button>'
+      : '<div class="bubble">' + esc(m.text) + '</div>';
+    return '<div class="msg me"><div><div class="line">' + inner + '<span class="time">' + esc(m.t) + '</span></div></div></div>';
+  }
+  function openKRoom(){
+    openScreen("kroom");
+    var b = $("kroomBody");
+    setTimeout(function(){ b.scrollTop = b.scrollHeight; }, 30);
+  }
+  function openKFriend(key){
+    var f = null;
+    DATA.kakaoFriends.forEach(function(x){ if (x.key === key) f = x; });
+    if (!f) return;
+    $("s-kprof").querySelector("h1").textContent = "";
+    var chatBtn = key === "rabbit"
+      ? '<button class="tap" data-chat="rabbit"><span>💬</span>1:1 채팅</button>'
+      : '<button class="tap" data-toast="카카오톡 대화 기록 없음 · 통화로만 연락함"><span>💬</span>1:1 채팅</button>';
+    var callMsg = key === "rabbit" ? "🐰 보이스톡 거는 중…" : "유지안에게 보이스톡 거는 중…";
+    $("kprofBody").innerHTML =
+      '<div class="big av ' + esc(f.cls) + '" style="border-radius:40px;width:110px;height:110px;font-size:' + (key === "rabbit" ? "54px" : "36px") + '">' + esc(f.av) + '</div>' +
+      '<div class="nm">' + esc(f.name) + '</div>' +
+      '<div class="st">' + (key === "rabbit" ? "알림음이 켜진 유일한 친구 🔔" : "카카오톡 친구 2명 중 한 명") + '</div>' +
+      '<div class="acts">' + chatBtn +
+      '<button class="tap" data-toast="' + esc(callMsg) + '"><span>📞</span>통화하기</button></div>';
+    openScreen("s-kprof");
+  }
+
+  function renderWA(){
+    var h = "";
+    ["oliver","raven"].forEach(function(k){
+      var w = DATA.wa[k];
+      h += '<button class="row tap" data-wa="' + k + '" style="border-color:#1f2c33">' +
+        '<span class="av" style="background:' + (k === "raven" ? "#3a0b0b" : "#2a3942") + '">' + (k === "raven" ? "🐦‍⬛" : "OG") + '</span>' +
+        '<span class="main"><span class="t">' + esc(w.name) + (w.muted ? " 🔕" : "") + '</span>' +
+        '<span class="s">' + (w.msg ? esc(w.msg) : "무음 처리됨") + '</span></span>' +
+        '<span class="r"><span style="display:block;margin-bottom:4px">' + esc(w.time) + '</span><span class="wa-count' + (w.muted ? " mute" : "") + '">' + w.unread + '</span></span></button>';
+    });
+    $("waList").innerHTML = h;
+  }
+  function openWA(k){
+    var w = DATA.wa[k]; if (!w) return;
+    $("waTitle").textContent = w.name;
+    var h = "";
+    if (w.msg){
+      h += '<div class="unread-bar"><span>읽지 않은 메시지 ' + w.unread + '개 · 미리보기로만 확인</span></div>' +
+           '<div class="msg them"><div class="wa-b">' + esc(w.msg) +
+           '<div class="tr">' + esc(w.tr) + '</div><div class="tm">' + esc(w.time) + '</div></div></div>' +
+           '<div class="unread-bar"><span>📵 부재중 전화 11통 · 전부 무시</span></div>';
+    } else {
+      h += '<div class="unread-bar"><span>🔕 무음 처리된 그룹</span></div>' +
+           '<div class="unread-bar"><span>읽지 않은 메시지 ' + w.unread + '개</span></div>' +
+           '<div class="unread-bar"><span>열어보지 않음</span></div>';
+    }
+    $("waBody").innerHTML = h;
+    openScreen("s-waroom");
+  }
+
+  function tileHTML(key){
+    var p = DATA.photos[key];
+    return '<button class="ph" data-photo="' + key + '" style="background:' + p.bg + '" aria-label="' + esc(p.t) + '">' +
+      '<span style="pointer-events:none">' + p.e + '</span>' +
+      (p.fav ? '<span class="fv">❤️</span>' : "") + '<span class="cap">' + esc(p.t) + '</span></button>';
+  }
+  function renderPhotos(){
+    var r = "";
+    DATA.recentOrder.forEach(function(k){ r += tileHTML(k); });
+    r += '<button class="ph more" data-toast="최근 2주 270여 장 — 전부 루비 지분 🐰">+260여 장<small>전부 루비</small></button>';
+    $("phRecent").innerHTML = r;
+
+    var f = "";
+    Object.keys(DATA.photos).forEach(function(k){ if (DATA.photos[k].fav) f += tileHTML(k); });
+    f += '<button class="ph more" data-toast="즐겨찾기 19장 — 100% 루비 독사진 및 투샷">+17장<small>100% 루비</small></button>';
+    $("phFav").innerHTML = f;
+
+    var p = "";
+    DATA.pastOrder.forEach(function(k){ p += tileHTML(k); });
+    p += '<button class="ph more" data-toast="과거 사진은 약 40장이 전부 — 원래 사진 안 찍음">약 40장<small>원래 안 찍음</small></button>';
+    $("phPast").innerHTML = p;
+  }
+  var curPhoto = null;
+  function openPhoto(key){
+    var p = DATA.photos[key]; if (!p) return;
+    curPhoto = key;
+    $("phvTitle").textContent = p.album;
+    var art = $("phvArt");
+    art.style.background = p.bg;
+    art.textContent = p.e;
+    $("phvName").textContent = p.t;
+    $("phvDesc").textContent = p.d;
+    $("phvFav").classList.toggle("on", !!p.fav);
+    openScreen("s-photo");
+  }
+
+  function renderNotes(){
+    var h = "";
+    DATA.notes.forEach(function(n, i){
+      h += '<button class="row tap" data-note="' + i + '"><span class="main"><span class="t">' + esc(n.title) + '</span>' +
+        '<span class="s">' + esc(n.items[0]) + '</span></span><span class="chev">›</span></button>';
+    });
+    $("noteList").innerHTML = h;
+  }
+  function openNote(i){
+    var n = DATA.notes[i]; if (!n) return;
+    var h = '<h2>' + esc(n.title) + '</h2><div class="d">' + esc(n.date) + ' · 체크해도 저장되지 않음</div>';
+    n.items.forEach(function(it){
+      h += '<button class="memo-li" data-toggle="memo"><span class="ck">✓</span><span class="tx">' + esc(it) + '</span></button>';
+    });
+    $("noteBody").innerHTML = h;
+    openScreen("s-note");
+  }
+
+  function renderSearches(){
+    var h = "";
+    DATA.searches.forEach(function(s, i){
+      h += '<button class="row tap" data-search="' + i + '"><span style="color:var(--muted);flex-shrink:0">🕘</span>' +
+        '<span class="main"><span class="t" style="font-weight:500;font-size:15px">' + esc(s.q) + '</span></span><span class="chev">↖</span></button>';
+    });
+    $("searchList").innerHTML = h;
+  }
+  function openSearch(i){
+    var s = DATA.searches[i]; if (!s) return;
+    $("searchBody").innerHTML =
+      '<div class="addr">🔍 <span>' + esc(s.q) + '</span></div>' +
+      '<div class="srch-res"><div class="q">“' + esc(s.q) + '”</div>' +
+      '<div class="note-box" style="margin:0">💭 ' + esc(s.n) + '</div></div>';
+    openScreen("s-search");
+  }
+
+  function renderPapago(){
+    var h = "";
+    DATA.phrases.forEach(function(p, i){
+      h += '<button class="phr" data-action="speak" data-idx="' + i + '" style="border-color:#1d2a23">' +
+        '<span style="flex:1;min-width:0"><span class="ko" style="display:block">' + esc(p.ko) + '</span>' +
+        '<span class="ro" style="display:block">' + esc(p.ro) + '</span>' +
+        (p.nt ? '<span class="nt" style="display:block">' + esc(p.nt) + '</span>' : "") + '</span>' +
+        '<span class="spk">🔊</span></button>';
+    });
+    $("phraseList").innerHTML = h;
+  }
+  function speak(i){
+    var p = DATA.phrases[i]; if (!p) return;
+    showToast("🔊 " + p.ko + " (" + p.ro + ")");
+    try {
+      if (window.speechSynthesis && window.SpeechSynthesisUtterance){
+        window.speechSynthesis.cancel();
+        var u = new SpeechSynthesisUtterance(p.ko);
+        u.lang = "ko-KR"; u.rate = 0.85;
+        window.speechSynthesis.speak(u);
+      }
+    } catch(e){}
+  }
+
+  function renderCart(){
+    var h = "";
+    DATA.cart.forEach(function(c){
+      h += '<button class="cart-i tap" data-toast="' + esc(c.n + " · " + c.o) + '"><span class="th">' + c.e + '</span>' +
+        '<span style="flex:1;min-width:0"><span style="display:block;font-weight:600;font-size:15px">' + esc(c.n) + '</span>' +
+        '<span style="display:block;font-size:13px;color:var(--muted);margin-top:2px">' + esc(c.o) + ' · 수량 1</span></span></button>';
+    });
+    $("cartList").innerHTML = h;
+  }
+  function renderDeli(){
+    var h = "";
+    DATA.deli.forEach(function(e){
+      h += '<button class="deli-c tap" data-toast="영국 자택 주변 즐겨찾기 디저트 샵 · 지금은 마요르카라 배달 불가"><span class="e">' + e + '</span><span class="n">★ 즐겨찾기</span></button>';
+    });
+    $("deliGrid").innerHTML = h;
+  }
+
+  /* ================= Spotify ================= */
+  var DUR = 184, cur = 0, playing = false, playTimer = null;
+  function fmt(s){ var m = Math.floor(s / 60), r = Math.floor(s % 60); return m + ":" + (r < 10 ? "0" : "") + r; }
+  function drawProg(){
+    var bar = $("progBar"), c = $("pCur");
+    if (bar) bar.style.width = (cur / DUR * 100) + "%";
+    if (c) c.textContent = fmt(cur);
+  }
+  function setPlay(on){
+    playing = on;
+    $("playBtn").textContent = on ? "❚❚" : "▶";
+    $("cover").classList.toggle("spin", on);
+    clearInterval(playTimer);
+    if (on){
+      playTimer = setInterval(function(){
+        cur += 1; if (cur >= DUR) cur = 0;
+        drawProg();
+      }, 1000);
+    }
+  }
+
+  /* ================= 시계 ================= */
+  function pad(n){ return (n < 10 ? "0" : "") + n; }
+  function tzTime(tz){
+    try {
+      return new Date().toLocaleTimeString("en-GB", { timeZone: tz, hour: "2-digit", minute: "2-digit", hour12: false });
+    } catch(e){ return "--:--"; }
+  }
+  function tick(){
+    safe(function(){
+      var d = new Date();
+      var hm = pad(d.getHours()) + ":" + pad(d.getMinutes());
+      $("sbTime").textContent = hm;
+      $("lockTime").textContent = hm;
+      var days = ["일","월","화","수","목","금","토"];
+      $("lockDate").textContent = (d.getMonth() + 1) + "월 " + d.getDate() + "일 " + days[d.getDay()] + "요일";
+    });
+    safe(function(){
+      $("wxLon").textContent = tzTime("Europe/London");
+      $("wxSeo").textContent = tzTime("Asia/Seoul");
+      $("wxPmi").textContent = tzTime("Europe/Madrid");
+    });
+  }
+
+  /* ================= 이벤트 (위임) ================= */
+  function handleAction(name, el){
+    switch(name){
+      case "back": if (canNav()) goBack(); break;
+      case "home":
+        if (!canNav()) break;
+        goHome(); break;
+      case "unlock": if (canNav()) goHome(); break;
+      case "lock": if (canNav()) openScreen("s-lock"); break;
+      case "fav":
+        if (curPhoto && DATA.photos[curPhoto]){
+          var on = el.classList.toggle("on");
+          showToast(on ? "❤️ 즐겨찾기에 표시" : "즐겨찾기 표시 해제 (…정말?)");
+        }
+        break;
+      case "share": showToast("에어드롭 대상: 🐰 Rabbit"); break;
+      case "lockwall": showToast("🌅 현재 잠금화면: 노을 볼 뽀뽀 셀카"); break;
+      case "shutter":
+        var f = $("flash");
+        f.classList.remove("go"); void f.offsetWidth; f.classList.add("go");
+        showToast("찰칵 📸 — 루비 없으면 찍을 게 없음");
+        break;
+      case "play": setPlay(!playing); break;
+      case "restart": cur = 0; drawProg(); showToast("⏮ 처음부터"); break;
+      case "reveal": showToast("잔액 확인 안 함 — 한 번도 안 열어 봄"); break;
+      case "speak": speak(parseInt(el.getAttribute("data-idx"), 10)); break;
+    }
+  }
+
+  function onClick(e){
+    var el = e.target.closest("[data-open],[data-action],[data-chat],[data-wa],[data-call],[data-photo],[data-note],[data-search],[data-kfriend],[data-tab],[data-toast],[data-toggle]");
+    var phone = $("phone");
+    if (!el || !phone.contains(el)) return;
+
+    if (el.hasAttribute("data-open")){ if (canNav()) openScreen(el.getAttribute("data-open")); return; }
+    if (el.hasAttribute("data-action")){ handleAction(el.getAttribute("data-action"), el); return; }
+    if (el.hasAttribute("data-chat")){ if (canNav()) openKRoom(); return; }
+    if (el.hasAttribute("data-wa")){ if (canNav()) openWA(el.getAttribute("data-wa")); return; }
+    if (el.hasAttribute("data-call")){ if (canNav()) openCall(parseInt(el.getAttribute("data-call"), 10)); return; }
+    if (el.hasAttribute("data-photo")){ if (canNav()) openPhoto(el.getAttribute("data-photo")); return; }
+    if (el.hasAttribute("data-note")){ if (canNav()) openNote(parseInt(el.getAttribute("data-note"), 10)); return; }
+    if (el.hasAttribute("data-search")){ if (canNav()) openSearch(parseInt(el.getAttribute("data-search"), 10)); return; }
+    if (el.hasAttribute("data-kfriend")){ if (canNav()) openKFriend(el.getAttribute("data-kfriend")); return; }
+    if (el.hasAttribute("data-tab")){
+      var v = el.getAttribute("data-tab"), g = v.split(":")[0];
+      var btns = document.querySelectorAll('[data-tab^="' + g + ':"]');
+      for (var i = 0; i < btns.length; i++) btns[i].classList.toggle("on", btns[i].getAttribute("data-tab") === v);
+      var panes = document.querySelectorAll('[data-pane^="' + g + ':"]');
+      for (var j = 0; j < panes.length; j++) panes[j].classList.toggle("on", panes[j].getAttribute("data-pane") === v);
+      return;
+    }
+    if (el.hasAttribute("data-toggle")){
+      var kind = el.getAttribute("data-toggle");
+      if (kind === "memo"){ el.classList.toggle("done"); return; }
+      var on = el.classList.toggle("on");
+      if (kind === "alarm"){
+        $("alarmRow").classList.toggle("dim", !on);
+        showToast(on ? "⏰ 오전 6:45 · 진동 알람 켜짐" : "알람 꺼짐 — 루비 아침은 어쩌고?");
+      } else if (kind === "dnd"){
+        showToast(on ? "☾ 방해금지 켜짐 · 루비만 허용" : "방해금지 꺼짐 — 알림 284개가 쏟아집니다…");
+      }
+      return;
+    }
+    if (el.hasAttribute("data-toast")){ showToast(el.getAttribute("data-toast")); return; }
+  }
+
+  function onSubmit(e){
+    e.preventDefault();
+    var inp = $("kInput");
+    var v = (inp.value || "").trim();
+    if (!v) return;
+    var d = new Date(), h = d.getHours();
+    var t = (h < 12 ? "오전 " : "오후 ") + ((h % 12) || 12) + ":" + pad(d.getMinutes());
+    var body = $("kroomBody");
+    body.insertAdjacentHTML("beforeend", kakaoMsgHTML({ from:"n", text:v, t:t }));
+    inp.value = "";
+    body.scrollTop = body.scrollHeight;
+  }
+
+  /* ================= 초기화 ================= */
+  function init(){
+    var phone = $("phone");
+    phone.addEventListener("click", onClick);
+    $("kForm").addEventListener("submit", onSubmit);
+    document.addEventListener("keydown", function(e){ if (e.key === "Escape") goBack(); });
+
+    safe(renderCalls);
+    safe(renderKakao);
+    safe(renderWA);
+    safe(renderPhotos);
+    safe(renderNotes);
+    safe(renderSearches);
+    safe(renderPapago);
+    safe(renderCart);
+    safe(renderDeli);
+    safe(drawProg);
+
+    renderStack();
+    tick();
+    setInterval(tick, 10000);
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
+</script>
+</body>
+</html>
